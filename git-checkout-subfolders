@@ -1,0 +1,60 @@
+#!/bin/bash
+
+show_help(){
+    echo "Usage:"
+    echo "$0 repo-url [-n repo-folder-name] folder-to-checkout-1 folder-to-checkout-2 ..."
+    exit 1
+}
+
+OPTIND=1
+# Resetting OPTIND is necessary if getopts was used previously in the script.
+# It is a good idea to make OPTIND local if you process options in a function.
+
+while getopts nu: opt; do
+    case $opt in
+        u)  REPO_URL=$OPTARG
+            ;;
+        n)  REPO_NAME=$OPTARG
+            ;;
+        *)
+            show_help >&2
+            exit 1
+            ;;
+    esac
+done
+shift "$((OPTIND-1))"   # Discard the options and sentinel --
+
+if [ -z $REPO_URL ]; then
+    echo "ERROR: No repo url specified"
+    show_help;
+fi
+
+
+if [ -z $REPO_NAME ]; then
+    REPO_NAME="${REPO_URL##*/}"
+fi
+
+if [ -d $REPO_NAME ]; then
+    echo "Error: Repo \"$REPO_NAME\" already exists in this folder"
+    echo "Chose another repo-name with the -n option"
+    exit 2;
+fi
+
+mkdir $REPO_NAME
+cd $REPO_NAME
+git init
+git remote add -f origin $REPO_URL
+git config core.sparseCheckout true
+
+# Everything that's left in "$@" is a non-option
+printf '<%s>\n' "$@"
+for subfolder in "$@"; do
+    echo $subfolder >> .git/info/sparse-checkout
+done
+FOLDERS_TO_INCLUDE_NUMER=${#@}
+if [ $FOLDERS_TO_INCLUDE_NUMER -lt 1 ]; then
+    echo "WARNING: No folders included: will download nothing"
+    exit 3;
+else
+    git pull origin master
+fi
