@@ -6,3 +6,5 @@ echo Actualizando privateconfigs
 cd ~/privateconfigs && git pull
 echo Actualizando wiki
 cd ~/wiki && git pull
+echo Actualizando scripts
+cd ~/scripts && git pull
