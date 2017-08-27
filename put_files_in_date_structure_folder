@@ -1,0 +1,61 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+from datetime import datetime
+import os
+import sys
+
+def move_file_to_its_date_folder_from_ctime(filename):
+    """
+    Moves a file into a folder structure named after the year,
+    month and day values of its ctime (obtained from os.stat and
+    st_mtime) value
+    If the folder structure doesn't exist, it creates it.
+
+    :filename: the name of the file to be moved
+    :returns: nothing
+
+    """
+    # print filename
+    if not os.path.isdir(filename): # Don't move folders
+        file_timestamp = os.stat(filename).st_mtime
+        file_modified_date = datetime.utcfromtimestamp(int(file_timestamp))
+        path_from_date = file_modified_date.strftime("%Y/%m/%d")
+        file_folder = os.path.split(filename)[0]
+        relative_path =  file_folder + '/' + path_from_date
+        try:
+            # Create folder structure
+            os.makedirs(relative_path)
+        except OSError, e:
+            # If any of the folders of the structure already exists,
+            # it throws one of these, so ignore it
+            pass
+
+        # Move file to new year/month/day structure
+        # inside the file's folder
+        try:
+            base_filename = os.path.split(filename)[1]
+            destination = relative_path + "/" + base_filename
+            print "Will rename: {} to {}".format(filename, destination)
+            os.rename(filename, destination)
+        except OSError, e:
+            print e
+
+
+# Moves all files from the folder to their date-structure folder
+def main(folder):
+    add_parent_folder_to_file = lambda x: folder + "/" + x
+    full_paths = map(add_parent_folder_to_file, os.listdir(folder))
+    map(move_file_to_its_date_folder_from_ctime, full_paths)
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print "Moves files from the specified folder to a date structure (year-month-day)"
+        print "inside the specified folder"
+        print "---"
+        print "Usage:"
+        print "     {} FOLDER_TO_SCAN".format(sys.argv[0])
+    else:
+        folder = sys.argv[1]
+        print folder
+        main(folder)
