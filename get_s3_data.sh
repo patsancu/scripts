@@ -11,7 +11,7 @@ for i in `seq 0 $NUMBER_OF_DAYS`; do
     echo -n "Getting data for: " ;
     fecha=`date -d "$BEGIN_DATE $i days" +"%Y-%m-%d"`;
     echo $fecha;
-    mkdir $fecha; cd $fecha;
+    mkdir -p $fecha; cd $fecha;
     aws s3 cp --recursive s3://bucket-name/path/to/folders/$fecha/ .;
     cd ..;
 done
