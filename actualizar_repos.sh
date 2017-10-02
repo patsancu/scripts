@@ -1,10 +1,10 @@
 #!/bin/bash
 
-echo ">>>Actualizando Configs"
+echo ">>> Actualizando Configs"
 cd ~/Configs && git pull
-echo ">>>Actualizando privateconfigs"
+echo ">>> Actualizando privateconfigs"
 cd ~/privateconfigs && git pull
-echo ">>>Actualizando wiki"
+echo ">>> Actualizando wiki"
 cd ~/wiki && git pull
-echo ">>>Actualizando scripts"
+echo ">>> Actualizando scripts"
 cd ~/scripts && git pull
