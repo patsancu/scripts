@@ -1,10 +1,15 @@
 #!/bin/bash
 
+CONFIG_FOLDER_PATH=~/configs
+PRIVATE_FOLDER_PATH=~/privateconfigs
+WIKI_FOLDER_PATH=~/wiki
+SCRIPTS_FOLDER_PATH=~/scripts
+
 echo ">>> Actualizando Configs"
-cd ~/Configs && git pull
+cd $CONFIG_FOLDER_PATH && git pull
 echo ">>> Actualizando privateconfigs"
-cd ~/privateconfigs && git pull
+cd $PRIVATE_FOLDER_PATH && git pull
 echo ">>> Actualizando wiki"
-cd ~/wiki && git pull
+cd $WIKI_PATH && git pull
 echo ">>> Actualizando scripts"
-cd ~/scripts && git pull
+cd $SCRIPTS_FOLDER_PATH && git pull
