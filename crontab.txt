@@ -1,0 +1,2 @@
+# crontab THIS_FILENAME to load cron jobs
+0 20 * * * /home/patrick/scripts/backup_rhythmbox.sh
