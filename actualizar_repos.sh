@@ -1,10 +1,18 @@
 #!/bin/bash
 
-echo ">>> Actualizando Configs"
-cd ~/Configs && git pull
+CONFIG_REPO=${HOME}/configs
+PRIVATE_CONFIGS_REPO=${HOME}/privateconfigs
+SCRIPTS_REPO=${HOME}/scripts
+WIKI_REPO=${HOME}/wiki
+
+echo ">>> Actualizando configs"
+[ -d "$CONFIG_REPO" ] && cd ~/configs && git pull
+
 echo ">>> Actualizando privateconfigs"
-cd ~/privateconfigs && git pull
+[ -d "$PRIVATE_CONFIGS_REPO" ] && cd ~/privateconfigs && git pull
+
 echo ">>> Actualizando wiki"
-cd ~/wiki && git pull
+[ -d "$WIKI_REPO" ] && cd ~/wiki && git pull
+
 echo ">>> Actualizando scripts"
-cd ~/scripts && git pull
+[ -d "$SCRIPTS_REPO" ] && cd ~/scripts && git pull
