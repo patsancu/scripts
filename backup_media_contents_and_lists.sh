@@ -11,12 +11,14 @@ cd $BACKUP_REPO
 #############
 ## Rhythmbox
 #############
-RHYTHMBOX_FILE=playlist_rhythmbox.xml
-git diff --exit-code $RHYTHMBOX_FILE > /dev/null
+RHYTHMBOX_FILE=/home/patrick/.local/share/rhythmbox/playlists.xml
+LOCAL_RHYTHMBOX_FILE=./playlist_rhythmbox.xml
+diff $RHYTHMBOX_FILE $LOCAL_RHYTHMBOX_FILE > /dev/null
 if [ $? -eq 0 ]; then
     echo "$(date +'%Y%m%d-%H%M%S') Nothing new in rhythmbox" >> $BACKUP_LOG_FOLDER/logs.txt
 else
-    git add $RHYTHMBOX_FILE;
+    cp -f $RHYTHMBOX_FILE $LOCAL_RHYTHMBOX_FILE
+    git add $LOCAL_RHYTHMBOX_FILE;
     git commit -m "rhythmbox $(date +'%Y%m%d-%H%M%S')";
     echo "$(date +'%Y%m%d-%H%M%S') A rhythmbox file was backed up" >> $BACKUP_LOG_FOLDER/logs.txt
 fi
