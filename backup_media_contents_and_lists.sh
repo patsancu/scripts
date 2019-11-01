@@ -69,4 +69,6 @@ IT_EBOOKS_CONTENT=it_ebooks_content.txt
 track_contents_of_folder_and_back_it_up "$IT_EBOOKS_FOLDER" "$IT_EBOOKS_CONTENT" "it ebooks"
 
 
+git push origin HEAD
+
 cd -
