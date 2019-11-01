@@ -68,6 +68,12 @@ IT_EBOOKS_FOLDER="/media/patrick/Toshiba/IT ebooks"
 IT_EBOOKS_CONTENT=it_ebooks_content.txt
 track_contents_of_folder_and_back_it_up "$IT_EBOOKS_FOLDER" "$IT_EBOOKS_CONTENT" "it ebooks"
 
+##################
+## Movies
+##################
+MOVIES_FOLDER="/media/patrick/5CDB67E0093E26AF/Películas/"
+MOVIES_CONTENT=movies.txt
+track_contents_of_folder_and_back_it_up "$MOVIES_FOLDER" "$MOVIES_CONTENT" "movies"
 
 git push origin HEAD
 
