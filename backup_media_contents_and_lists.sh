@@ -23,6 +23,13 @@ else
     echo "$(date +'%Y%m%d-%H%M%S') A rhythmbox file was backed up" >> $BACKUP_LOG_FOLDER/logs.txt
 fi
 
+git_add_contents() {
+    CONTENTS_FILE=$1
+    NAME_OF_TYPE_OF_DATA_TO_BE_SAVED=$2
+    git add $CONTENTS_FILE;
+    git commit -m "$NAME_OF_TYPE_OF_DATA_TO_BE_SAVED contents $(date +'%Y%m%d-%H%M%S')"
+    echo "$(date +'%Y%m%d-%H%M%S') $NAME_OF_TYPE_OF_DATA_TO_BE_SAVED folder contents were backed up" >> $BACKUP_LOG_FOLDER/logs.txt
+}
 track_contents_of_folder_and_back_it_up(){
     # First argument would be the folder
     # Second argument should be the name of the file where the contents will be dumped
@@ -30,16 +37,20 @@ track_contents_of_folder_and_back_it_up(){
     CONTENTS_FILE=$2
     NAME_OF_TYPE_OF_DATA_TO_BE_SAVED=$3
     echo "Tracking $NAME_OF_TYPE_OF_DATA_TO_BE_SAVED"
-    if [ -d "$PATH_TO_FOLDER" ]; then
-        find "$PATH_TO_FOLDER" -not -path '*/\.*' -print | sed -e 's;/*/;|;g;s;|; |;g' > $CONTENTS_FILE
-        git diff --exit-code $CONTENTS_FILE > /dev/null
-        if [ $? -eq 0 ]; then
-            echo "$(date +'%Y%m%d-%H%M%S') Nothing new in $NAME_OF_TYPE_OF_DATA_TO_BE_SAVED" >> $BACKUP_LOG_FOLDER/logs.txt
-        else
-            git add $CONTENTS_FILE;
-            git commit -m "$NAME_OF_TYPE_OF_DATA_TO_BE_SAVED contents $(date +'%Y%m%d-%H%M%S')"
-            echo "$(date +'%Y%m%d-%H%M%S') $NAME_OF_TYPE_OF_DATA_TO_BE_SAVED folder contents were backed up" >> $BACKUP_LOG_FOLDER/logs.txt
+    git ls-files --error-unmatch $CONTENTS_FILE >/dev/null 2>&1
+    if [ $? -eq 0 ]; then
+        if [ -d "$PATH_TO_FOLDER" ]; then
+            find "$PATH_TO_FOLDER" -not -path '*/\.*' -print | sed -e 's;/*/;|;g;s;|; |;g' > $CONTENTS_FILE
+            git diff --exit-code $CONTENTS_FILE > /dev/null
+            if [ $? -eq 0 ]; then
+                echo "$(date +'%Y%m%d-%H%M%S') Nothing new in $NAME_OF_TYPE_OF_DATA_TO_BE_SAVED" >> $BACKUP_LOG_FOLDER/logs.txt
+            else
+                git_add_contents "$CONTENTS_FILE" "$NAME_OF_TYPE_OF_DATA_TO_BE_SAVED"
+            fi
         fi
+    else
+        echo "$(date +'%Y%m%d-%H%M%S') File $CONTENTS_FILE wasn't tracked. Adding it to git repo" >> $BACKUP_LOG_FOLDER/logs.txt
+        git_add_contents "$CONTENTS_FILE" "$NAME_OF_TYPE_OF_DATA_TO_BE_SAVED"
     fi
 }
 
