@@ -31,8 +31,6 @@ git_add_contents() {
     echo "$(date +'%Y%m%d-%H%M%S') $NAME_OF_TYPE_OF_DATA_TO_BE_SAVED folder contents were backed up" >> $BACKUP_LOG_FOLDER/logs.txt
 }
 track_contents_of_folder_and_back_it_up(){
-    # First argument would be the folder
-    # Second argument should be the name of the file where the contents will be dumped
     PATH_TO_FOLDER=$1
     CONTENTS_FILE=$2
     NAME_OF_TYPE_OF_DATA_TO_BE_SAVED=$3
