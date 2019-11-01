@@ -37,20 +37,21 @@ track_contents_of_folder_and_back_it_up(){
     CONTENTS_FILE=$2
     NAME_OF_TYPE_OF_DATA_TO_BE_SAVED=$3
     echo "Tracking $NAME_OF_TYPE_OF_DATA_TO_BE_SAVED"
-    git ls-files --error-unmatch $CONTENTS_FILE >/dev/null 2>&1
-    if [ $? -eq 0 ]; then
-        if [ -d "$PATH_TO_FOLDER" ]; then
-            find "$PATH_TO_FOLDER" -not -path '*/\.*' -print | sed -e 's;/*/;|;g;s;|; |;g' > $CONTENTS_FILE
+    if [ -d "$PATH_TO_FOLDER" ]; then
+        find "$PATH_TO_FOLDER" -not -path '*/\.*' -print | sed -e 's;/*/;|;g;s;|; |;g' > $CONTENTS_FILE
+        git ls-files --error-unmatch "$CONTENTS_FILE" >/dev/null 2>&1
+        if [ $? -eq 0 ]; then # file was already tracked
+            # Check if there are changes
             git diff --exit-code $CONTENTS_FILE > /dev/null
-            if [ $? -eq 0 ]; then
+            if [ $? -eq 0 ]; then # there are no changes
                 echo "$(date +'%Y%m%d-%H%M%S') Nothing new in $NAME_OF_TYPE_OF_DATA_TO_BE_SAVED" >> $BACKUP_LOG_FOLDER/logs.txt
-            else
+            else # there are changes
                 git_add_contents "$CONTENTS_FILE" "$NAME_OF_TYPE_OF_DATA_TO_BE_SAVED"
             fi
+        else # File wasn't tracked
+            echo "$(date +'%Y%m%d-%H%M%S') File $CONTENTS_FILE wasn't tracked. Adding it to git repo" >> $BACKUP_LOG_FOLDER/logs.txt
+            git_add_contents "$CONTENTS_FILE" "$NAME_OF_TYPE_OF_DATA_TO_BE_SAVED"
         fi
-    else
-        echo "$(date +'%Y%m%d-%H%M%S') File $CONTENTS_FILE wasn't tracked. Adding it to git repo" >> $BACKUP_LOG_FOLDER/logs.txt
-        git_add_contents "$CONTENTS_FILE" "$NAME_OF_TYPE_OF_DATA_TO_BE_SAVED"
     fi
 }
 
