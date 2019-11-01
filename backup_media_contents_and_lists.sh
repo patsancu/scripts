@@ -75,6 +75,13 @@ MOVIES_FOLDER="/media/patrick/5CDB67E0093E26AF/Películas/"
 MOVIES_CONTENT=movies.txt
 track_contents_of_folder_and_back_it_up "$MOVIES_FOLDER" "$MOVIES_CONTENT" "movies"
 
+##################
+## Series
+##################
+SERIES_FOLDER="/media/patrick/1CBB81681EF426BF/SERIES"
+SERIES_CONTENT=series.txt
+track_contents_of_folder_and_back_it_up "$SERIES_FOLDER" "$SERIES_CONTENT" "series"
+
 git push origin HEAD
 
 cd -
