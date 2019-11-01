@@ -58,16 +58,5 @@ IT_EBOOKS_FOLDER="/media/patrick/Toshiba/IT ebooks"
 IT_EBOOKS_CONTENT=it_ebooks_content.txt
 track_contents_of_folder_and_back_it_up "$IT_EBOOKS_FOLDER" "$IT_EBOOKS_CONTENT" "it ebooks"
 
-if [ -d "$IT_EBOOKS_FOLDER" ]; then
-    find "$IT_EBOOKS_FOLDER" -not -path '*/\.*' -print | sed -e 's;/*/;|;g;s;|; |;g' > $IT_EBOOKS_CONTENT
-    git diff --exit-code $IT_EBOOKS_CONTENT > /dev/null
-    if [ $? -eq 0 ]; then
-        echo "$(date +'%Y%m%d-%H%M%S') Nothing new in it ebooks" >> $BACKUP_LOG_FOLDER/logs.txt
-    else
-        git add $IT_EBOOKS_CONTENT;
-        git commit -m "it ebooks contents $(date +'%Y%m%d-%H%M%S')"
-        echo "$(date +'%Y%m%d-%H%M%S') It ebooks folder contents were backed up" >> $BACKUP_LOG_FOLDER/logs.txt
-    fi
-fi
 
 cd -
