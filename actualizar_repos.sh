@@ -1,15 +1,18 @@
 #!/bin/bash
 
-CONFIG_FOLDER_PATH=~/configs
-PRIVATE_FOLDER_PATH=~/privateconfigs
-WIKI_FOLDER_PATH=~/wiki
-SCRIPTS_FOLDER_PATH=~/scripts
+CONFIG_REPO=${HOME}/configs
+PRIVATE_CONFIGS_REPO=${HOME}/privateconfigs
+SCRIPTS_REPO=${HOME}/scripts
+WIKI_REPO=${HOME}/wiki
 
-echo ">>> Actualizando Configs"
-cd $CONFIG_FOLDER_PATH && git pull
+echo ">>> Actualizando configs"
+[ -d "$CONFIG_REPO" ] && cd ~/configs && git pull
+
 echo ">>> Actualizando privateconfigs"
-cd $PRIVATE_FOLDER_PATH && git pull
+[ -d "$PRIVATE_CONFIGS_REPO" ] && cd ~/privateconfigs && git pull
+
 echo ">>> Actualizando wiki"
-cd $WIKI_PATH && git pull
+[ -d "$WIKI_REPO" ] && cd ~/wiki && git pull
+
 echo ">>> Actualizando scripts"
-cd $SCRIPTS_FOLDER_PATH && git pull
+[ -d "$SCRIPTS_REPO" ] && cd ~/scripts && git pull
