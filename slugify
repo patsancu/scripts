@@ -1,0 +1,25 @@
+#!/usr/bin/env python3
+
+import sys
+import re
+
+mappings = {
+    "Ä": "Ae",
+    "ä": "ae",
+    "Ü": "Ue",
+    "ü": "ue",
+    "Ö": "Oe",
+    "ö": "oe"
+}
+
+def slugify(name):
+    for key, value in mappings.items():
+        name = name.replace(key, value)
+    name = name.lower()
+    name = re.sub('[^a-z0-9]', '-', name)
+    name = re.sub('^-', '', name)
+    return name[:63]
+
+if __name__ == '__main__':
+    args = " ".join(sys.argv[1:])
+    print(slugify(args))
