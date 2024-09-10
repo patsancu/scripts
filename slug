@@ -17,6 +17,7 @@ def slugify(name):
         name = name.replace(key, value)
     name = name.lower()
     name = re.sub('[^a-z0-9]', '-', name)
+    name = re.sub('-+', '-', name)
     name = re.sub('^-', '', name)
     return name[:63]
 
